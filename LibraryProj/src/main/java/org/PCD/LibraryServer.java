@@ -1,6 +1,7 @@
 package org.PCD;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,18 +22,33 @@ public class LibraryServer {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Library Server is running...");
             while (true) {
-                try (Socket clientSocket = serverSocket.accept();
-                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-
-                    String request = in.readLine();
-                    if (request != null) {
-                        handleRequest(request, out);
-                    }
-                }
+                Socket clientSocket = serverSocket.accept();
+                new Thread(new ClientHandler(clientSocket)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class ClientHandler implements Runnable {
+        private Socket clientSocket;
+
+        public ClientHandler(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        @Override
+        public void run() {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
+
+                String request;
+                while ((request = in.readLine()) != null) {
+                    handleRequest(request, out);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -44,6 +60,21 @@ public class LibraryServer {
         switch (command.toLowerCase()) {
             case "list":
                 out.println(new Gson().toJson(library.listBooks()));
+                break;
+            case "add":
+                try {
+                    JsonObject jsonObject = new Gson().fromJson(argument, JsonObject.class);
+                    String titulo = jsonObject.get("titulo").getAsString();
+                    String autor = jsonObject.get("autor").getAsString();
+                    String genero = jsonObject.get("genero").getAsString();
+                    int exemplares = jsonObject.get("exemplares").getAsInt();
+
+                    Book newBook = new Book(titulo, autor, genero, exemplares);
+                    library.addBook(newBook);
+                    out.println("Book added successfully.");
+                } catch (Exception e) {
+                    out.println("Error adding book: " + e.getMessage());
+                }
                 break;
             default:
                 out.println("Unknown command.");

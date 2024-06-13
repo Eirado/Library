@@ -1,6 +1,7 @@
 package org.PCD;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,12 +29,15 @@ public class Library {
                 books = new ArrayList<>();
                 e.printStackTrace();
             }
+        } else {
+            books = new ArrayList<>();
         }
     }
 
     private void saveBooks() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("livros", new Gson().toJsonTree(books));
+        JsonArray jsonArray = new Gson().toJsonTree(books).getAsJsonArray();
+        jsonObject.add("livros", jsonArray);
 
         try (Writer writer = new FileWriter(FILE_PATH)) {
             new Gson().toJson(jsonObject, writer);
@@ -46,8 +50,17 @@ public class Library {
         return books;
     }
 
-    public void addBook(Book book) {
-        books.add(book);
+    public void addBook(Book newBook) {
+        for (Book book : books) {
+            if (book.getTitulo().equalsIgnoreCase(newBook.getTitulo()) &&
+                book.getAutor().equalsIgnoreCase(newBook.getAutor()) &&
+                book.getGenero().equalsIgnoreCase(newBook.getGenero())) {
+                book.setExemplares(book.getExemplares() + newBook.getExemplares());
+                saveBooks();
+                return;
+            }
+        }
+        books.add(newBook);
         saveBooks();
     }
 
