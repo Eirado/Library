@@ -28,8 +28,6 @@ public class Library {
                 books = new ArrayList<>();
                 e.printStackTrace();
             }
-        } else {
-            books = new ArrayList<>();
         }
     }
 
