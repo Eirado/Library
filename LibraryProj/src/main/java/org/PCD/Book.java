@@ -1,16 +1,11 @@
 package org.PCD;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Book {
-    private String titulo; // title
-    private String autor; // author
-    private String genero; // genre
-    private int exemplares; // copies
 
-    // Constructors, getters, and setters
-    public Book() {
-    }
+    private String titulo;
+    private String autor;
+    private String genero;
+    private int exemplares;
 
     public Book(String titulo, String autor, String genero, int exemplares) {
         this.titulo = titulo;

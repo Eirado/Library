@@ -27,21 +27,6 @@ public class LibraryClient {
                 if (command.equalsIgnoreCase("exit")) {
                     break;
                 }
-
-                if (command.equalsIgnoreCase("add")) {
-                    System.out.println("Enter book details as JSON:");
-                    String bookJson = scanner.nextLine();
-                    command = "add " + bookJson;
-                } else if (command.equalsIgnoreCase("rent")) {
-                    System.out.println("Enter the name of the book to rent:");
-                    String bookName = scanner.nextLine();
-                    command = "rent " + bookName;
-                } else if (command.equalsIgnoreCase("return")) {
-                    System.out.println("Enter the name of the book to return:");
-                    String bookName = scanner.nextLine();
-                    command = "return " + bookName;
-                }
-
                 out.println(command);
                 String response = in.readLine();
                 if (response != null) {

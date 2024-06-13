@@ -45,25 +45,6 @@ public class LibraryServer {
             case "list":
                 out.println(new Gson().toJson(library.listBooks()));
                 break;
-            case "add":
-                Book bookToAdd = new Gson().fromJson(argument, Book.class);
-                library.addBook(bookToAdd);
-                out.println("Book added.");
-                break;
-            case "rent":
-                if (library.rentBook(argument)) {
-                    out.println("Book rented.");
-                } else {
-                    out.println("Book not available or not found.");
-                }
-                break;
-            case "return":
-                if (library.returnBook(argument)) {
-                    out.println("Book returned.");
-                } else {
-                    out.println("Book not found.");
-                }
-                break;
             default:
                 out.println("Unknown command.");
                 break;
