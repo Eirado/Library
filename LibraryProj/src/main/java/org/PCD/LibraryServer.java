@@ -77,6 +77,20 @@ public class LibraryServer {
                     out.println("Error adding book: " + e.getMessage());
                 }
                 break;
+            case "borrow":
+                if (library.rentBook(argument)) {
+                    out.println("OK");
+                } else {
+                    out.println("ERROR: Failed to borrow book: " + argument);
+                }
+                break;
+            case "return":
+                if (library.returnBook(argument)) {
+                    out.println("OK");
+                } else {
+                    out.println("ERROR: Failed to return book: " + argument);
+                }
+                break;
             default:
                 out.println("Unknown command.");
                 break;

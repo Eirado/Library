@@ -18,7 +18,9 @@ public class LibraryClient {
     private enum Command {
         LIST,
         ADD,
-        EXIT
+        EXIT,
+        BORROW,
+        RETURN
     }
 
     public static void main(String[] args) {
@@ -30,7 +32,7 @@ public class LibraryClient {
             Gson gson = new Gson();
 
             while (true) {
-                System.out.println("\nEnter command (list, add, exit):");
+                System.out.println("\nEnter command (list, add, borrow, return, exit):");
                 String input = scanner.nextLine().trim().toLowerCase();
 
                 try {
@@ -78,9 +80,33 @@ public class LibraryClient {
             String responseAdd = in.readLine(); // Read server response
             System.out.println(responseAdd); // Display response from server
             break;
+
+        case BORROW:
+            System.out.print("Title of the book to be borrowed: ");
+            var bookTitleInput = scanner.nextLine().trim();
+            out.println(command.name().toLowerCase() + " " + bookTitleInput);
+            var response = in.readLine();
+            if (response.equals("OK")) {
+                System.out.println("Borrowed book successfully!");
+            } else {
+                System.out.println(response);
+            }
+            break;
+        case RETURN:
+            System.out.print("Title of the book to be returned: ");
+            var returnBookTitleInput = scanner.nextLine().trim();
+            out.println(command.name().toLowerCase() + " " + returnBookTitleInput);
+            response = in.readLine();
+            if (response.equals("OK")) {
+                System.out.println("Book was returned successfully!");
+            } else {
+                System.out.println(response);
+            }
+            break;
         default:
             System.out.println("Unknown command.");
             break;
     }
+    out.flush();
 }
 }

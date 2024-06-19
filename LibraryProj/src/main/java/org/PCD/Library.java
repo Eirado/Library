@@ -45,6 +45,7 @@ public class Library {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        loadBooks();
     }
 
     public List<Book> listBooks() {
@@ -59,7 +60,6 @@ public class Library {
                 book.getAutor().equalsIgnoreCase(newBook.getAutor()) &&
                 book.getGenero().equalsIgnoreCase(newBook.getGenero())) {
                 book.setExemplares(book.getExemplares() + newBook.getExemplares());
-                saveBooks();
                 return;
             }
         }
