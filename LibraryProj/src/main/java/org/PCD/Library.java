@@ -7,11 +7,12 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Library {
-    private static final String FILE_PATH = "/Users/gabrieleirado/Documents/Java/Library/LibraryProj/src/main/java/org/PCD/livros.json";
+    private static final String FILE_PATH = Paths.get("src", "main", "java", "org", "PCD", "livros.json").toAbsolutePath().toString();
     private List<Book> books;
 
     public Library() {
@@ -49,6 +50,8 @@ public class Library {
     public List<Book> listBooks() {
         return books;
     }
+
+    public List<Book> listAvailableBooks() { return listBooks().stream().filter(book -> { return book.getExemplares() > 0; }).toList(); }
 
     public void addBook(Book newBook) {
         for (Book book : books) {

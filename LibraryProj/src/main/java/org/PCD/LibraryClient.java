@@ -30,7 +30,7 @@ public class LibraryClient {
             Gson gson = new Gson();
 
             while (true) {
-                System.out.println("Enter command (list, add, exit):");
+                System.out.println("\nEnter command (list, add, exit):");
                 String input = scanner.nextLine().trim().toLowerCase();
 
                 try {

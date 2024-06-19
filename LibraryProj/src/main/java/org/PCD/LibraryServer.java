@@ -59,7 +59,8 @@ public class LibraryServer {
 
         switch (command.toLowerCase()) {
             case "list":
-                out.println(new Gson().toJson(library.listBooks()));
+                var availableBooks = library.listAvailableBooks();
+                out.println(new Gson().toJson(availableBooks));
                 break;
             case "add":
                 try {
