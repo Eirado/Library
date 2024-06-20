@@ -43,7 +43,7 @@ public class LibraryServer {
                  PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
                 String request;
-                while ((request = in.readLine()) != null) {
+                while ((request = in.readLine()) != null || !clientSocket.isClosed()) {
                     handleRequest(request, out);
                 }
             } catch (IOException e) {
@@ -54,15 +54,26 @@ public class LibraryServer {
 
     private void handleRequest(String request, PrintWriter out) {
         String[] parts = request.split(" ", 2);
-        String command = parts[0];
+        String commandString = parts[0];
         String argument = parts.length > 1 ? parts[1] : "";
 
-        switch (command.toLowerCase()) {
-            case "list":
+        try {
+            Command command = Command.valueOf(commandString.toUpperCase());
+            handleCommand(command, out, argument);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid command. Please enter one of: list, add, borrow, return, current, exit");
+            out.println("Invalid command.");
+        }
+        out.flush();
+    }
+
+    private void handleCommand(Command command, PrintWriter out, String argument) {
+        switch (command) {
+            case LIST:
                 var availableBooks = library.listAvailableBooks();
                 out.println(new Gson().toJson(availableBooks));
                 break;
-            case "add":
+            case ADD:
                 try {
                     JsonObject jsonObject = new Gson().fromJson(argument, JsonObject.class);
                     String titulo = jsonObject.get("titulo").getAsString();
@@ -77,14 +88,14 @@ public class LibraryServer {
                     out.println("Error adding book: " + e.getMessage());
                 }
                 break;
-            case "borrow":
+            case BORROW:
                 if (library.rentBook(argument)) {
                     out.println("OK");
                 } else {
                     out.println("ERROR: Failed to borrow book: " + argument);
                 }
                 break;
-            case "return":
+            case RETURN:
                 if (library.returnBook(argument)) {
                     out.println("OK");
                 } else {
@@ -92,7 +103,7 @@ public class LibraryServer {
                 }
                 break;
             default:
-                out.println("Unknown command.");
+                out.println("Server is not able to handle command: " + command);
                 break;
         }
     }
