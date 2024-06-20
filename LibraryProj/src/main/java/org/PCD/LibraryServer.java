@@ -39,15 +39,20 @@ public class LibraryServer {
 
         @Override
         public void run() {
+            System.out.println("New client connection from " + clientSocket.getRemoteSocketAddress());
             try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                  PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
                 String request;
-                while ((request = in.readLine()) != null || !clientSocket.isClosed()) {
-                    handleRequest(request, out);
+                while ((request = in.readLine()) != null) {
+                    if (clientSocket.isConnected()) {
+                        handleRequest(request, out);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                System.out.println("Closing connection from " + clientSocket.getRemoteSocketAddress());
             }
         }
     }

@@ -74,7 +74,7 @@ public class LibraryClient {
 
         case BORROW:
             System.out.print("Title of the book to be borrowed: ");
-            var bookTitleInput = scanner.nextLine().trim();
+            var bookTitleInput = scanner.nextLine().trim().toLowerCase();
             if (borrowedBooks.hasBorrowedBook(bookTitleInput)) {
                 System.out.println("Book already borrowed.");
                 break;
@@ -90,7 +90,7 @@ public class LibraryClient {
             break;
         case RETURN:
             System.out.print("Title of the book to be returned: ");
-            var returnBookTitleInput = scanner.nextLine().trim();
+            var returnBookTitleInput = scanner.nextLine().trim().toLowerCase();
             if (!borrowedBooks.hasBorrowedBook(returnBookTitleInput)) {
                 System.out.println("You did not borrow this book.");
                 break;
