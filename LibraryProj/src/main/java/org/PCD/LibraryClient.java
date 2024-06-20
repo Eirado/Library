@@ -2,11 +2,9 @@ package org.PCD;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.Socket;
 import java.nio.file.Paths;
 import java.util.ArrayList;
