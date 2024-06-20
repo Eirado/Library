@@ -23,6 +23,7 @@ public class LibraryClient {
         EXIT,
         BORROW,
         RETURN,
+        CURRENT,
     }
 
     public static void main(String[] args) {
@@ -34,7 +35,7 @@ public class LibraryClient {
             Gson gson = new Gson();
 
             while (true) {
-                System.out.println("\nEnter command (list, add, borrow, return, exit):");
+                System.out.println("\nEnter command (list, add, borrow, return, current, exit):");
                 String input = scanner.nextLine().trim().toLowerCase();
 
                 try {
@@ -44,7 +45,7 @@ public class LibraryClient {
                     }
                     handleCommand(command, out, in, gson, scanner);
                 } catch (IllegalArgumentException e) {
-                    System.err.println("Invalid command. Please enter one of: list, add, exit");
+                    System.err.println("Invalid command. Please enter one of: list, add, borrow, return, current, exit");
                 }
             }
         } catch (IOException e) {
@@ -113,6 +114,17 @@ public class LibraryClient {
                 System.out.println("Book was returned successfully!");
             } else {
                 System.out.println(response);
+            }
+            break;
+        case CURRENT:
+            loadBorrowedBooks();
+            if (borrowedBooks.isEmpty()) {
+                System.out.println("There are no borrowed books.");
+                break;
+            }
+            System.out.println("Currently Borrowed Books:");
+            for (var book : borrowedBooks) {
+                System.out.println(book);
             }
             break;
         default:
