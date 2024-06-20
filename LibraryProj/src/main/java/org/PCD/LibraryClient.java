@@ -29,11 +29,16 @@ public class LibraryClient {
                 try {
                     Command command = Command.valueOf(input.toUpperCase());
                     if (command == Command.EXIT) {
+                        socket.close();
                         break;
                     }
                     handleCommand(command, out, in, gson, scanner);
                 } catch (IllegalArgumentException e) {
                     System.err.println("Invalid command. Please enter one of: list, add, borrow, return, current, exit");
+                } catch (IOException e) {
+                    System.err.println("Failed to close socket.");
+                    System.err.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         } catch (IOException e) {
